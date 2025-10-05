@@ -33,13 +33,13 @@ restricciones de seguridad.
 1.  Clonar el repositorio:
 
     ``` bash
-    git clone https://github.com/tuusuario/kipu-bank.git
+    git clone https://github.com/leandromasotti/kipu-bank.git
     cd kipu-bank
     ```
 
 2.  Abrir el contrato en [Remix](https://remix.ethereum.org/).
 
-3.  Compilar con **Solidity 0.8.20 o superior**.
+3.  Compilar con **Solidity 0.8.30 o superior**.
 
 4.  En la pestaña **Deploy & Run Transactions**, elegir el entorno (ej.
     `Injected Provider - MetaMask` para testnet).
@@ -47,7 +47,6 @@ restricciones de seguridad.
 5.  Ingresar los parámetros del constructor al desplegar:
 
     -   `bankCap`: límite total del banco (en wei).
-    -   `perTxWithdrawLimit`: máximo retiro por transacción (en wei).
 
 6.  Presionar **Deploy**.
 
@@ -76,13 +75,9 @@ restricciones de seguridad.
 
 ## Dirección desplegada
 
-Una vez desplegado en una testnet (Goerli / Sepolia), incluye aquí la
-dirección del contrato y el link al verificador en el block explorer.
+Dirección: [0xB73BA0dBF3CF95eEe3E6A8546BF6d57049289070](https://sepolia.etherscan.io/address/0xB73BA0dBF3CF95eEe3E6A8546BF6d57049289070)
 
-Ejemplo:
-
-    Dirección: 0x1234...abcd
-    Block Explorer: https://sepolia.etherscan.io/address/0x1234...abcd#code
+Block Explorer: [0xB73BA0dBF3CF95eEe3E6A8546BF6d57049289070](https://eth-sepolia.blockscout.com/address/0xB73BA0dBF3CF95eEe3E6A8546BF6d57049289070?tab=index)
 
 ## Licencia
 
