@@ -1,6 +1,17 @@
-
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.30;
+
+/*///////////////////////////////////
+             Imports
+///////////////////////////////////*/
+
+/*///////////////////////////////////
+           Interfaces
+///////////////////////////////////*/
+
+/*///////////////////////////////////
+            Libraries
+///////////////////////////////////*/
 
 /** 
  * @title KipuBank
@@ -9,6 +20,11 @@ pragma solidity ^0.8.30;
  * @dev Implementa buenas prácticas: errores personalizados, checks-effects-interactions, nonReentrant, eventos, NatSpec.
  */ 
 contract KipuBank {
+
+
+    /*///////////////////////////////////
+            Type declarations
+    ///////////////////////////////////*/
 
     /*///////////////////////////////////
             State variables
@@ -38,7 +54,6 @@ contract KipuBank {
     /// @notice Per-user counters for withdrawals.
     mapping(address => uint256) private _userWithdrawalsCount;
 
-
     /*///////////////////////////////////
                 Events
     ///////////////////////////////////*/
@@ -67,15 +82,24 @@ contract KipuBank {
     error KB_ZeroAmount();
 
     /// @notice Emitted when a deposit would exceed the global bank cap.
+    /// @param attempted The deposit amount attempted by the user.
+    /// @param bankCap The maximum total amount allowed in the bank.
     error KB_BankCapExceeded(uint256 attempted, uint256 bankCap);
 
-    /// @notice Emitted when a user tries to withdraw more than their balance.
+    /// @notice Emitted when a user tries to withdraw more than their available balance.
+    /// @param account The address of the user attempting the withdrawal.
+    /// @param balance The current available balance of the user.
+    /// @param requested The withdrawal amount requested by the user.
     error KB_InsufficientBalance(address account, uint256 balance, uint256 requested);
 
-    /// @notice Emitted when a single-withdrawal request exceeds the per-transaction limit.
+    /// @notice Emitted when a single withdrawal request exceeds the per-transaction withdrawal limit.
+    /// @param requested The withdrawal amount requested by the user.
+    /// @param perTxLimit The maximum withdrawal limit allowed per transaction.
     error KB_WithdrawLimitExceeded(uint256 requested, uint256 perTxLimit);
-
-    /// @notice Emitted when a native transfer fails.
+    
+    /// @notice Emitted when a native ETH transfer fails.
+    /// @param to The recipient address of the attempted transfer.
+    /// @param amount The amount of ETH attempted to be transferred.
     error KB_TransferFailed(address to, uint256 amount);
 
     /*///////////////////////////////////
@@ -89,6 +113,7 @@ contract KipuBank {
         if (amount == 0) revert KB_ZeroAmount();
         _;
     }
+
     /*///////////////////////////////////
                 Functions
     ///////////////////////////////////*/
@@ -182,6 +207,23 @@ contract KipuBank {
         return _userWithdrawalsCount[account];
     }
 
+    /*/////////////////////////
+            constructor
+    /////////////////////////*/
+
+    /**
+    * @notice Deploy the KipuBank with given global cap and per-transaction withdraw limit.
+    * @param _bankCap The maximum total ETH the contract may hold (in wei).
+    */
+    constructor(uint256 _bankCap){
+        require(_bankCap > 0, "bankCap must be > 0"); // brief sanity check (constructor only)
+        i_bankCap = _bankCap;
+    }
+
+    /*/////////////////////////
+        Receive&Fallback
+    /////////////////////////*/
+
     /**
      * @notice Convenience: deposit by sending plain ETH to contract address.
      * @dev The receive fallback forwards to internal deposit logic.
@@ -209,20 +251,19 @@ contract KipuBank {
     }
 
     /*/////////////////////////
-            Constructor
+            external
+    /////////////////////////*/
+    
+    /*/////////////////////////
+            public
     /////////////////////////*/
 
-    /**
-    * @notice Deploy the KipuBank with given global cap and per-transaction withdraw limit.
-    * @param _bankCap The maximum total ETH the contract may hold (in wei).
-    */
-    constructor(uint256 _bankCap){
-        require(_bankCap > 0, "bankCap must be > 0"); // brief sanity check (constructor only)
-        i_bankCap = _bankCap;
-    }
+    /*/////////////////////////
+            internal
+    /////////////////////////*/
 
     /*/////////////////////////
-            Private
+            private
     /////////////////////////*/
 
     /**
