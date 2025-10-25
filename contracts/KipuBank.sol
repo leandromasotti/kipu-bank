@@ -81,6 +81,9 @@ contract KipuBank {
     /// @notice Emitted when an operation receives a zero amount where > 0 is required.
     error KB_ZeroAmount();
 
+    /// @notice Emitted when an operation receives a bank cap where > 0 is required.
+    error KB_BankCapMustBePositive();
+    
     /// @notice Emitted when a deposit would exceed the global bank cap.
     /// @param attempted The deposit amount attempted by the user.
     /// @param bankCap The maximum total amount allowed in the bank.
@@ -216,7 +219,7 @@ contract KipuBank {
     * @param _bankCap The maximum total ETH the contract may hold (in wei).
     */
     constructor(uint256 _bankCap){
-        require(_bankCap > 0, "bankCap must be > 0"); // brief sanity check (constructor only)
+        if(_bankCap <= 0) revert KB_BankCapMustBePositive(); // brief sanity check (constructor only)
         i_bankCap = _bankCap;
     }
 
